@@ -1,2 +1,2 @@
-# pabnes
+# Pabnes
 NES emulator built with Rust
