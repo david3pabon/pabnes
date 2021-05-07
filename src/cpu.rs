@@ -32,6 +32,8 @@ impl CPU {
                 }
     
                 0xAA => self.tax(),
+
+                0xE8 => self.inx(),
     
                 0x00 => return,
                 
@@ -47,6 +49,16 @@ impl CPU {
   
     fn tax(&mut self) {
         self.reg_x = self.reg_a;
+        self.update_zero_and_negative_flags(self.reg_x);
+    }
+  
+    fn inx(&mut self) {
+        if self.reg_x < 0xff {
+            self.reg_x = self.reg_x + 1;
+        } else {
+            self.reg_x = 0;
+        }
+        
         self.update_zero_and_negative_flags(self.reg_x);
     }
    
@@ -100,15 +112,6 @@ mod test {
     }
 
     #[test]
-   fn test_5_ops_working_together() {
-       let mut cpu = CPU::new();
-
-       cpu.execute(vec![0xa9, 0xc0, 0xaa, 0xe8, 0x00]);
- 
-       assert_eq!(cpu.reg_x, 0xc1)
-   }
-
-    #[test]
     fn test_inx_overflow() {
         let mut cpu = CPU::new();
         cpu.reg_x = 0xff;
@@ -116,5 +119,14 @@ mod test {
         cpu.execute(vec![0xe8, 0xe8, 0x00]);
 
         assert_eq!(cpu.reg_x, 1)
+    }
+
+    #[test]
+    fn test_5_ops_working_together() {
+        let mut cpu = CPU::new();
+
+        cpu.execute(vec![0xa9, 0xc0, 0xaa, 0xe8, 0x00]);
+
+        assert_eq!(cpu.reg_x, 0xc1)
     }
 }
