@@ -75,11 +75,12 @@ impl CPU {
                 },
 
                 0x85 => {
-                    self.lta(&AddressingMode::ZeroPage);
+                    println!("got here 1");
+                    self.sta(&AddressingMode::ZeroPage);
                     self.pc += 1;
                 },
                 0x95 => {
-                    self.lta(&AddressingMode::ZeroPageX);
+                    self.sta(&AddressingMode::ZeroPageX);
                     self.pc += 1;
                 },
     
@@ -110,8 +111,10 @@ impl CPU {
         self.update_zero_and_negative_flags(self.reg_a);
     }
   
-    fn lta(&mut self, mode: &AddressingMode) {
+    fn sta(&mut self, mode: &AddressingMode) {
+        println!("got here 2");
         let addr = self.get_operand_address(mode);
+        println!("got here 2, addr: {} and register a: {}", &addr, &self.reg_a);
         self.mem_write(addr, self.reg_a);
     }
   
@@ -244,15 +247,17 @@ mod test {
         assert_eq!(cpu.reg_a, 0x55);
     }
 
-    // #[test]
-    // fn test_lta_to_memory() {
-    //     let mut cpu = CPU::new();
-    //     cpu.reg_a = 0x55;
+    #[test]
+    fn test_lta_to_memory() {
+        let mut cpu = CPU::new();
+        cpu.load(vec![0x85, 0x10, 0x00]);
+        cpu.reset();
+        cpu.reg_a = 0x55;
         
-    //     cpu.load_and_run(vec![0x85, 0x10, 0x00]);
+        cpu.run();
         
-    //     assert_eq!(cpu.mem_read(0x10 as u16), 0x55);
-    // }
+        assert_eq!(cpu.mem_read(0x10 as u16), 0x55);
+    }
     
     #[test]
     fn test_tax_move_a_to_x() {
