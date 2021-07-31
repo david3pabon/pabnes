@@ -1,8 +1,11 @@
 // use std::env;
 // use std::fs;
 
-// mod cpu;
-// mod opcodes;
+mod cpu;
+mod opcodes;
+
+#[macro_use]
+extern crate bitflags;
 
 // use cpu::CPU;
 

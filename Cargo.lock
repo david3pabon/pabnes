@@ -989,6 +989,7 @@ dependencies = [
 name = "pabnes"
 version = "0.1.0"
 dependencies = [
+ "bitflags",
  "lazy_static",
  "piston",
  "piston2d-graphics",
