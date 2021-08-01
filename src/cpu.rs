@@ -395,8 +395,6 @@ impl CPU {
                 _ => todo!(),
             }
 
-
-
             if pc_state == self.pc {
                 self.pc += (operand.len - 1) as u16;
             }
